@@ -1,16 +1,15 @@
 // package io.confluent.kafka.serializers.protobuf;
-package io.confluent.kafka.serializers.protobuf;
+package protobuf;
+
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
+import io.confluent.kafka.serializers.protobuf.ProtobufSchemaAndValue;
 
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
-import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
-import io.confluent.kafka.schemaregistry.protobuf.MessageIndexes;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaProvider;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaUtils;
 import io.confluent.kafka.schemaregistry.utils.BoundedConcurrentHashMap;
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDe;
+import java.util.Objects;
+import java.util.Properties;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.errors.InvalidConfigurationException;
 import org.apache.kafka.common.errors.SerializationException;
@@ -21,8 +20,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+
+import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
+import io.confluent.kafka.schemaregistry.protobuf.MessageIndexes;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaProvider;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaUtils;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDe;
 
 public abstract class AbstractKafkaProtobufDeserializer<T extends Message>
     extends AbstractKafkaSchemaSerDe {

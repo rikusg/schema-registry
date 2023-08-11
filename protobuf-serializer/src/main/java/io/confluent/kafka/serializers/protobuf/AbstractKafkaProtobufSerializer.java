@@ -1,18 +1,11 @@
 // package io.confluent.kafka.serializers.protobuf;
-package io.confluent.kafka.serializers.protobuf;
+package protobuf;
+
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
 import com.google.protobuf.Message;
 import com.squareup.wire.schema.internal.parser.ProtoFileElement;
 import io.confluent.kafka.schemaregistry.ParsedSchema;
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
-import io.confluent.kafka.schemaregistry.client.rest.entities.Schema;
-import io.confluent.kafka.schemaregistry.client.rest.entities.SchemaReference;
-import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
-import io.confluent.kafka.schemaregistry.protobuf.MessageIndexes;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaProvider;
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDe;
-import io.confluent.kafka.serializers.subject.strategy.ReferenceSubjectNameStrategy;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.errors.InvalidConfigurationException;
 import org.apache.kafka.common.errors.SerializationException;
@@ -23,6 +16,16 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.rest.entities.Schema;
+import io.confluent.kafka.schemaregistry.client.rest.entities.SchemaReference;
+import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
+import io.confluent.kafka.schemaregistry.protobuf.MessageIndexes;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaProvider;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDe;
+import io.confluent.kafka.serializers.subject.strategy.ReferenceSubjectNameStrategy;
 
 public abstract class AbstractKafkaProtobufSerializer<T extends Message>
     extends AbstractKafkaSchemaSerDe {

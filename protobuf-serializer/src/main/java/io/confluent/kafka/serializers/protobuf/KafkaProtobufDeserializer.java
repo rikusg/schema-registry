@@ -1,12 +1,15 @@
 // package io.confluent.kafka.serializers.protobuf;
-package io.confluent.kafka.serializers.protobuf;
+package protobuf;
+
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Message;
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
+
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 
 public class KafkaProtobufDeserializer<T extends Message>
     extends AbstractKafkaProtobufDeserializer<T> implements Deserializer<T> {

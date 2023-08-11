@@ -1,18 +1,17 @@
 // package io.confluent.kafka.serializers;
-package io.confluent.kafka.serializers;
+package protobuf;
 
-import io.confluent.kafka.schemaregistry.ParsedSchema;
-import io.confluent.kafka.schemaregistry.SchemaProvider;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+
 import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClientFactory;
-import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import io.confluent.kafka.schemaregistry.utils.BoundedConcurrentHashMap;
+import java.util.Objects;
+import java.util.Optional;
+
 import io.confluent.kafka.schemaregistry.utils.QualifiedSubject;
 import io.confluent.kafka.serializers.context.NullContextNameStrategy;
 import io.confluent.kafka.serializers.context.strategy.ContextNameStrategy;
-import io.confluent.kafka.serializers.subject.TopicNameStrategy;
-import io.confluent.kafka.serializers.subject.strategy.SubjectNameStrategy;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericContainer;
 import org.apache.kafka.common.KafkaException;
@@ -21,7 +20,16 @@ import org.apache.kafka.common.errors.SerializationException;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import io.confluent.kafka.schemaregistry.ParsedSchema;
+import io.confluent.kafka.schemaregistry.SchemaProvider;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
+import io.confluent.kafka.serializers.subject.strategy.SubjectNameStrategy;
+import io.confluent.kafka.serializers.subject.TopicNameStrategy;
 
 /**
  * Common fields and helper methods for both the serializer and the
@@ -102,7 +110,7 @@ public abstract class AbstractKafkaSchemaSerDe {
 
     protected boolean isDeprecatedSubjectNameStrategy(boolean isKey) {
         Object subjectNameStrategy = subjectNameStrategy(isKey);
-        return !(subjectNameStrategy instanceof SubjectNameStrategy);
+        return !(subjectNameStrategy instanceof io.confluent.kafka.serializers.subject.strategy.SubjectNameStrategy);
     }
 
     private Object subjectNameStrategy(boolean isKey) {

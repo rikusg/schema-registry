@@ -1,19 +1,22 @@
 // package io.confluent.kafka.serializers.protobuf;
-package io.confluent.kafka.serializers.protobuf;
+package protobuf;
+
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Message;
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaUtils;
 import io.confluent.kafka.schemaregistry.utils.BoundedConcurrentHashMap;
+import java.io.IOException;
 import org.apache.kafka.common.errors.InvalidConfigurationException;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
-import java.io.IOException;
 import java.util.Map;
+
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema;
+import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaUtils;
 
 public class KafkaProtobufSerializer<T extends Message>
     extends AbstractKafkaProtobufSerializer<T> implements Serializer<T> {
