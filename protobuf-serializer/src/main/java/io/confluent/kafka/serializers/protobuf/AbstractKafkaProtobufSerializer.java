@@ -1,20 +1,7 @@
-/*
- * Copyright 2020 Confluent Inc.
- *
- * Licensed under the Confluent Community License (the "License"); you may not use
- * this file except in compliance with the License.  You may obtain a copy of the
- * License at
- *
- * http://www.confluent.io/confluent-community-license
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OF ANY KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations under the License.
- *
- */
+// package io.confluent.kafka.serializers.protobuf;
+package protobuf;
 
-package io.confluent.kafka.serializers.protobuf;
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
 import com.google.protobuf.Message;
 import com.squareup.wire.schema.internal.parser.ProtoFileElement;
@@ -77,17 +64,21 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
   }
 
   protected byte[] serializeImpl(
-      String subject, String topic, boolean isKey, T object, ProtobufSchema schema
-  ) throws SerializationException, InvalidConfigurationException {
+      String subject, String topic, boolean isKey, T object, ProtobufSchema schema)
+      throws SerializationException, InvalidConfigurationException {
     if (schemaRegistry == null) {
       throw new InvalidConfigurationException(
           "SchemaRegistryClient not found. You need to configure the serializer "
               + "or use serializer constructor with SchemaRegistryClient.");
     }
-    // null needs to treated specially since the client most likely just wants to send
-    // an individual null value instead of making the subject a null type. Also, null in
-    // Kafka has a special meaning for deletion in a topic with the compact retention policy.
-    // Therefore, we will bypass schema registration and return a null value in Kafka, instead
+    // null needs to treated specially since the client most likely just wants to
+    // send
+    // an individual null value instead of making the subject a null type. Also,
+    // null in
+    // Kafka has a special meaning for deletion in a topic with the compact
+    // retention policy.
+    // Therefore, we will bypass schema registration and return a null value in
+    // Kafka, instead
     // of an encoded null.
     if (object == null) {
       return null;
@@ -113,8 +104,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
           String formatted = schema.formattedString(schemaFormat);
           schema = schema.copyWithSchema(formatted);
         }
-        schema = (ProtobufSchema)
-            lookupSchemaBySubjectAndId(subject, useSchemaId, schema, idCompatStrict);
+        schema = (ProtobufSchema) lookupSchemaBySubjectAndId(subject, useSchemaId, schema, idCompatStrict);
         id = schemaRegistry.getId(subject, schema);
       } else if (useLatestVersion) {
         restClientErrorMsg = "Error retrieving latest version: ";
@@ -141,17 +131,20 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
     }
   }
 
-
   /**
    * Resolve schema dependencies recursively.
    *
    * @param schemaRegistry     schema registry client
    * @param autoRegisterSchema whether to automatically register schemas
-   * @param useLatestVersion   whether to use the latest subject version for serialization
-   * @param latestCompatStrict whether to check that the latest subject version is backward
+   * @param useLatestVersion   whether to use the latest subject version for
+   *                           serialization
+   * @param latestCompatStrict whether to check that the latest subject version is
+   *                           backward
    *                           compatible with the schema of the object
-   * @param latestVersions     an optional cache of latest subject versions, may be null
-   * @param strategy           the strategy for determining the subject name for a reference
+   * @param latestVersions     an optional cache of latest subject versions, may
+   *                           be null
+   * @param strategy           the strategy for determining the subject name for a
+   *                           reference
    * @param topic              the topic
    * @param isKey              whether the object is the record key
    * @param schema             the schema
@@ -166,8 +159,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
       ReferenceSubjectNameStrategy strategy,
       String topic,
       boolean isKey,
-      ProtobufSchema schema
-  ) throws IOException, RestClientException {
+      ProtobufSchema schema) throws IOException, RestClientException {
     return resolveDependencies(
         schemaRegistry,
         autoRegisterSchema,
@@ -186,12 +178,17 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
    *
    * @param schemaRegistry     schema registry client
    * @param autoRegisterSchema whether to automatically register schemas
-   * @param useLatestVersion   whether to use the latest subject version for serialization
-   * @param latestCompatStrict whether to check that the latest subject version is backward
+   * @param useLatestVersion   whether to use the latest subject version for
+   *                           serialization
+   * @param latestCompatStrict whether to check that the latest subject version is
+   *                           backward
    *                           compatible with the schema of the object
-   * @param latestVersions     an optional cache of latest subject versions, may be null
-   * @param skipKnownTypes     whether to skip known types when resolving schema dependencies
-   * @param strategy           the strategy for determining the subject name for a reference
+   * @param latestVersions     an optional cache of latest subject versions, may
+   *                           be null
+   * @param skipKnownTypes     whether to skip known types when resolving schema
+   *                           dependencies
+   * @param strategy           the strategy for determining the subject name for a
+   *                           reference
    * @param topic              the topic
    * @param isKey              whether the object is the record key
    * @param schema             the schema
@@ -207,8 +204,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
       ReferenceSubjectNameStrategy strategy,
       String topic,
       boolean isKey,
-      ProtobufSchema schema
-  ) throws IOException, RestClientException {
+      ProtobufSchema schema) throws IOException, RestClientException {
     return resolveDependencies(
         schemaRegistry,
         false,
@@ -220,8 +216,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
         strategy,
         topic,
         isKey,
-        schema
-    );
+        schema);
   }
 
   /**
@@ -230,12 +225,17 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
    * @param schemaRegistry     schema registry client
    * @param normalizeSchema    whether to normalized the schema
    * @param autoRegisterSchema whether to automatically register schemas
-   * @param useLatestVersion   whether to use the latest subject version for serialization
-   * @param latestCompatStrict whether to check that the latest subject version is backward
+   * @param useLatestVersion   whether to use the latest subject version for
+   *                           serialization
+   * @param latestCompatStrict whether to check that the latest subject version is
+   *                           backward
    *                           compatible with the schema of the object
-   * @param latestVersions     an optional cache of latest subject versions, may be null
-   * @param skipKnownTypes     whether to skip known types when resolving schema dependencies
-   * @param strategy           the strategy for determining the subject name for a reference
+   * @param latestVersions     an optional cache of latest subject versions, may
+   *                           be null
+   * @param skipKnownTypes     whether to skip known types when resolving schema
+   *                           dependencies
+   * @param strategy           the strategy for determining the subject name for a
+   *                           reference
    * @param topic              the topic
    * @param isKey              whether the object is the record key
    * @param schema             the schema
@@ -252,8 +252,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
       ReferenceSubjectNameStrategy strategy,
       String topic,
       boolean isKey,
-      ProtobufSchema schema
-  ) throws IOException, RestClientException {
+      ProtobufSchema schema) throws IOException, RestClientException {
     if (schema.dependencies().isEmpty() || !schema.references().isEmpty()) {
       // Dependencies already resolved
       return schema;
@@ -270,8 +269,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
         isKey,
         null,
         schema.rawSchema(),
-        schema.dependencies()
-    );
+        schema.dependencies());
     return schema.copy(s.getReferences());
   }
 
@@ -288,10 +286,16 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
       boolean isKey,
       String name,
       ProtoFileElement protoFileElement,
-      Map<String, ProtoFileElement> dependencies
-  ) throws IOException, RestClientException {
+      Map<String, ProtoFileElement> dependencies) throws IOException, RestClientException {
+
+    System.out.println("private static Schema resolveDependencies() " + topic + " " + name);
+
     List<SchemaReference> references = new ArrayList<>();
     for (String dep : protoFileElement.getImports()) {
+
+      System.out.println("protoFileElement.getImports() Checking " + dep);
+      if (skipKnownTypes && dep.contains("/validate.proto")) { continue; }
+
       if (skipKnownTypes && ProtobufSchema.knownTypes().contains(dep)) {
         continue;
       }
@@ -307,11 +311,13 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
           isKey,
           dep,
           dependencies.get(dep),
-          dependencies
-      );
+          dependencies);
       references.add(new SchemaReference(dep, subschema.getSubject(), subschema.getVersion()));
     }
     for (String dep : protoFileElement.getPublicImports()) {
+
+      System.out.println("protoFileElement.getPublicImports() Checking " + dep);
+
       if (skipKnownTypes && ProtobufSchema.knownTypes().contains(dep)) {
         continue;
       }
@@ -327,8 +333,7 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
           isKey,
           dep,
           dependencies.get(dep),
-          dependencies
-      );
+          dependencies);
       references.add(new SchemaReference(dep, subschema.getSubject(), subschema.getVersion()));
     }
     ProtobufSchema schema = new ProtobufSchema(protoFileElement, references, dependencies);
@@ -353,7 +358,6 @@ public abstract class AbstractKafkaProtobufSerializer<T extends Message>
         subject,
         version,
         id,
-        schema
-    );
+        schema);
   }
 }

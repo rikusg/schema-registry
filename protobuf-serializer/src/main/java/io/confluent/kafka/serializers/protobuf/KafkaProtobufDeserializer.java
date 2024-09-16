@@ -1,20 +1,7 @@
-/*
- * Copyright 2020 Confluent Inc.
- *
- * Licensed under the Confluent Community License (the "License"); you may not use
- * this file except in compliance with the License.  You may obtain a copy of the
- * License at
- *
- * http://www.confluent.io/confluent-community-license
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OF ANY KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations under the License.
- *
- */
+// package io.confluent.kafka.serializers.protobuf;
+package protobuf;
 
-package io.confluent.kafka.serializers.protobuf;
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Message;
@@ -31,15 +18,17 @@ public class KafkaProtobufDeserializer<T extends Message>
    * Constructor used by Kafka consumer.
    */
   public KafkaProtobufDeserializer() {
-
+    System.out.println("public KafkaProtobufDeserializer()");
   }
 
   public KafkaProtobufDeserializer(SchemaRegistryClient client) {
     schemaRegistry = client;
+    System.out.println("public KafkaProtobufDeserializer(SchemaRegistryClient client)");
   }
 
   public KafkaProtobufDeserializer(SchemaRegistryClient client, Map<String, ?> props) {
     this(client, props, null);
+    System.out.println("public KafkaProtobufDeserializer(SchemaRegistryClient client, Map<String, ?> props)");
   }
 
   @VisibleForTesting
@@ -48,11 +37,16 @@ public class KafkaProtobufDeserializer<T extends Message>
                                    Class<T> type) {
     schemaRegistry = client;
     configure(deserializerConfig(props), type);
+    System.out.println("public KafkaProtobufDeserializer(SchemaRegistryClient client, Map<String, ?> props, Class<T> type)");
   }
 
   @Override
   public void configure(Map<String, ?> configs, boolean isKey) {
     configure(new KafkaProtobufDeserializerConfig(configs), isKey);
+    System.out.println("public void configure(Map<String, ?> configs, boolean isKey) isKey=" + isKey);
+    for (Map.Entry<String, ?> entry: configs.entrySet()) {
+      System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -69,10 +63,15 @@ public class KafkaProtobufDeserializer<T extends Message>
           (Class<T>) config.getClass(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE)
       );
     }
+    System.out.println("public void configure(KafkaProtobufDeserializerConfig config, boolean isKey)");
+    for (Map.Entry<String, ?> entry: config.originalsStrings().entrySet()) {
+      System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+    }
   }
 
   @Override
   public T deserialize(String topic, byte[] bytes) {
+    System.out.println("public T deserialize(String topic, byte[] bytes)");
     return (T) deserialize(false, topic, isKey, bytes);
   }
 
